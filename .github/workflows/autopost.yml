@@ -1,0 +1,104 @@
+name: Auto Post (CRE Daily)
+
+on:
+  schedule:
+    # KST 09:00 (UTC+9) = UTC 00:00
+    - cron: "0 0 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autopost-main
+  cancel-in-progress: false
+
+jobs:
+  autopost:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Detect package manager
+        id: pm
+        shell: bash
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            echo "manager=pnpm" >> "$GITHUB_OUTPUT"
+          elif [ -f package-lock.json ]; then
+            echo "manager=npm" >> "$GITHUB_OUTPUT"
+          elif [ -f yarn.lock ]; then
+            echo "manager=yarn" >> "$GITHUB_OUTPUT"
+          else
+            echo "manager=npm" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ steps.pm.outputs.manager }}
+
+      - name: Setup pnpm
+        if: steps.pm.outputs.manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup yarn
+        if: steps.pm.outputs.manager == 'yarn'
+        run: corepack enable
+
+      - name: Install dependencies (pnpm)
+        if: steps.pm.outputs.manager == 'pnpm'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies (npm)
+        if: steps.pm.outputs.manager == 'npm'
+        run: npm ci
+
+      - name: Install dependencies (yarn)
+        if: steps.pm.outputs.manager == 'yarn'
+        run: yarn install --frozen-lockfile
+
+      - name: Generate auto post
+        env:
+          TZ: Asia/Seoul
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
+            pnpm autopost
+          elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
+            yarn autopost
+          else
+            npm run autopost
+          fi
+
+      - name: Commit and push (main direct)
+        shell: bash
+        env:
+          TZ: Asia/Seoul
+        run: |
+          if git diff --quiet -- content/posts data/post_log.json; then
+            echo "No changes"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/post_log.json
+          git add content/posts/*.md
+
+          if git diff --cached --quiet; then
+            echo "No staged changes"
+            exit 0
+          fi
+
+          TODAY="$(date +%F)"
+          git commit -m "자동 포스팅: ${TODAY} 오늘의 상업용 부동산 이슈"
+          git push origin HEAD:main

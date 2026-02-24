@@ -1,0 +1,32 @@
+[
+  {
+    "name": "국토연구원 부동산시장연구센터",
+    "type": "rss",
+    "url": "https://www.krihs.re.kr/rss/board.do?menuId=90"
+  },
+  {
+    "name": "한국은행 보도자료",
+    "type": "rss",
+    "url": "https://www.bok.or.kr/portal/bbs/B0000559/rssList.do?menuNo=200690"
+  },
+  {
+    "name": "CBRE Insights",
+    "type": "rss",
+    "url": "https://www.cbre.com/insights/rss"
+  },
+  {
+    "name": "JLL Research",
+    "type": "rss",
+    "url": "https://www.us.jll.com/en/trends-and-insights/research/rss"
+  },
+  {
+    "name": "Financial Times Commercial Property",
+    "type": "rss",
+    "url": "https://www.ft.com/commercial-property?format=rss"
+  },
+  {
+    "name": "Reuters Real Estate",
+    "type": "rss",
+    "url": "https://www.reutersagency.com/feed/?best-topics=real-estate"
+  }
+]
