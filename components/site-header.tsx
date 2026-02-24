@@ -9,7 +9,7 @@ export function SiteHeader() {
           href="/posts"
           className="text-lg font-bold tracking-tight text-foreground transition-opacity hover:opacity-70"
         >
-          {"내 블로그"}
+          {"lainWRLD"}
         </Link>
         <nav className="flex items-center gap-1">
           <Link

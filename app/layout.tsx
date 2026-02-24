@@ -10,12 +10,12 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "내 블로그",
-    template: "%s | 내 블로그",
+    default: "lainWRLD",
+    template: "%s | lainWRLD",
   },
   description: "개발, 투자, AI에 대한 생각을 기록하는 개인 블로그입니다.",
   openGraph: {
-    title: "내 블로그",
+    title: "lainWRLD",
     description: "개발, 투자, AI에 대한 생각을 기록하는 개인 블로그입니다.",
     type: "website",
     locale: "ko_KR",
