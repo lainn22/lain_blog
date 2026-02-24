@@ -1,5 +1,13 @@
 {
-  "entries": [],
+  "entries": [
+    {
+      "date": "2026-02-24",
+      "url_hash": "6a9824dbb4743585",
+      "title_hash": "9f69788dbb10d35a",
+      "title": "[자동 생성(대체 주제)] 2026-02-24 금리·자금조달·캡레이트 흐름 점검",
+      "file": "content/posts/2026-02-24-2026-02-24-cre-fallback-topic.md"
+    }
+  ],
   "meta": {
     "consecutive_failures": 0,
     "last_failure_at": null
